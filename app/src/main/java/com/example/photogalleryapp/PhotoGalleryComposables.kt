@@ -34,16 +34,17 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.photogalleryapp.ui.theme.PhotoGalleryAppTheme
 
 @Composable
 fun MainScreen() {
-
     val homeDestination = Screen.Home.route
     val navController = rememberNavController()
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentBackStackEntry?.destination?.route ?: homeDestination
 
-    val bottomBarScreens = listOf(Screen.ComposeGallery.route, Screen.Home.route, Screen.Profile.route)
+    val bottomBarScreens =
+        listOf(Screen.ComposeGallery.route, Screen.Home.route, Screen.Profile.route)
 
     val bottomBar = @Composable {
         val items = listOf(
@@ -67,7 +68,9 @@ fun MainScreen() {
     Scaffold(
         topBar = { TopBar(navController) },
         bottomBar = {
-            if (currentRoute in bottomBarScreens) { bottomBar() }
+            if (currentRoute in bottomBarScreens) {
+                bottomBar()
+            }
         }
 //        bottomBar = { BottomNavigationBar(navController) },
     ) { innerPadding ->
@@ -165,8 +168,8 @@ fun TopBar(
 
 
 @Composable
-fun HomeScreen(navController: androidx.navigation.NavController) {
-    val x = object{}::class.java.enclosingMethod?.name
+fun HomeScreen(navController: NavController) {
+    val x = object {}::class.java.enclosingMethod?.name
     Log.d("xylo", "HS: class name is $x")
     Column {
         Button(onClick = { navController.navigate(Screen.Settings.route) }) {
@@ -195,7 +198,7 @@ fun SettingsScreen(navController: androidx.navigation.NavController) {
 
 @Preview(showBackground = true)
 @Composable
-fun DefaultPreview() {
+fun DefaultPreview() = RenderPreview {
     MainScreen()
 }
 
