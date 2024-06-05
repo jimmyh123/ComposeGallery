@@ -21,10 +21,10 @@ import androidx.navigation.compose.rememberNavController
 fun BottomNavigationBar(
 //    navController: NavController,
     items: List<BottomNav>,
-    onClick: (String) -> Unit,
+    onClick: (BottomNav) -> Unit,
 ) {
 
-    var selectedItem by remember { mutableIntStateOf(0) }
+    val selectedItem by remember { mutableIntStateOf(0) }
     val items = listOf(
         BottomNav.System,
         BottomNav.Light,
@@ -48,7 +48,7 @@ fun BottomNavigationBar(
                 icon = { Icon(item.icon, contentDescription = item.name) },
                 label = { Text(item.name) },
                 selected = selectedItem == index,
-                onClick = { onClick(item.route) }
+                onClick = { onClick(item) }
             )
         }
     }
@@ -67,9 +67,8 @@ fun PreviewBottomNavigationBar() = RenderPreview {
         BottomNav.Dark,
     )
 
-    val onClick: (String) -> Unit = {
-//        selectedItem = index
-        navController.navigate(it) {
+    val onClick: (BottomNav) -> Unit = {
+        navController.navigate(it.route) {
             popUpTo(navController.graph.findStartDestination().id) {
                 saveState = true
             }

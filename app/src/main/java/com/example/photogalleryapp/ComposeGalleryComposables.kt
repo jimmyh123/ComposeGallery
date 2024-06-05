@@ -1,5 +1,6 @@
 package com.example.photogalleryapp
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -16,9 +17,12 @@ import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -30,7 +34,15 @@ import com.example.photogalleryapp.ui.theme.PhotoGalleryAppTheme
 
 @Composable
 fun ComposeGalleryMainComposable() {
-    PhotoGalleryAppTheme {
+    var currentTheme by remember { mutableStateOf(AppTheme.SYSTEM) }
+    var darkTheme by remember { mutableStateOf(false) }
+    darkTheme = when (currentTheme) {
+        AppTheme.SYSTEM -> isSystemInDarkTheme()
+        AppTheme.LIGHT -> false
+        AppTheme.DARK -> true
+    }
+
+    PhotoGalleryAppTheme (darkTheme = true) {
         val selectedTabIndex = remember { mutableIntStateOf(0) }
         val tabs = remember {
             mutableStateListOf(
@@ -88,10 +100,20 @@ fun ButtonsTab() {
             verticalArrangement = Arrangement.spacedBy(tinyMargin),
         ) {
             SectionTitle("Animated buttons", "All the animated buttons available for use in the app")
+
+            Text("Fancy Button")
             FancyButton()
+
+            Text("Scaling button")
             ScalingButton()
+
+            Text("ColourChangeButton")
             ColorChangeButton()
+
+            Text("PressEffectButton")
             PressEffectButton()
+
+            Text("SizeChangeButton")
             SizeChangeButton()
         }
     }
@@ -146,3 +168,7 @@ internal fun GalleryScreenComposable(modifier: Modifier = Modifier, content: @Co
 internal data class TabData(
     val name: String
 )
+
+enum class AppTheme {
+    SYSTEM, LIGHT, DARK
+}
